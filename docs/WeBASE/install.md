@@ -23,6 +23,7 @@
 | MySQL | MySQL-5.6及以上 |
 | Python | Python3.6及以上 |
 | PyMySQL | |
+| Nginx |  |
 
 ### 检查环境
 
@@ -842,5 +843,30 @@ org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating
 
 答：WeBASE CDN 加速服务提供 WeBASE 各子系统安装包的下载服务，可参考[国内镜像和CDN加速攻略](./mirror.html)
 
+### 12. 管理服务启动报错 “Caused by: javax.net.ssl.SSLHandshakeException: Received fatal alert: missing_extension”
+```
+Caused by: javax.net.ssl.SSLHandshakeException: Received fatal alert: missing_extension
+        at sun.security.ssl.Alert.createSSLException(Alert.java:131) ~[?:?]
+        at sun.security.ssl.Alert.createSSLException(Alert.java:117) ~[?:?]
+        at sun.security.ssl.TransportContext.fatal(TransportContext.java:347) ~[?:?]
+        at sun.security.ssl.Alert$AlertConsumer.consume(Alert.java:293) ~[?:?]
+        at sun.security.ssl.TransportContext.dispatch(TransportContext.java:186) ~[?:?]
+        at sun.security.ssl.SSLTransport.decode(SSLTransport.java:172) ~[?:?]
+        at sun.security.ssl.SSLSocketImpl.decode(SSLSocketImpl.java:1511) ~[?:?]
+        at sun.security.ssl.SSLSocketImpl.readHandshakeRecord(SSLSocketImpl.java:1421) ~[?:?]
+        at sun.security.ssl.SSLSocketImpl.startHandshake(SSLSocketImpl.java:456) ~[?:?]
+        at sun.security.ssl.SSLSocketImpl.startHandshake(SSLSocketImpl.java:427) ~[?:?]
+        at com.mysql.cj.protocol.ExportControlled.performTlsHandshake(ExportControlled.java:317) ~[mysql-connector-ja
+```
+答：vim fisco/webase-deploy/webase-node-mgr/conf/application.yml 在url 参数后面追加 &useSSL=false
+```
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/webasenodemanager?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false
+```
+
+### 13. 管理平台启动报错 “Exception: execute cmd error ,cmd : which nginx, status is 1 ,output i”
+ 答： 安装nignx 解决该问题
 
 *欢迎给WeBASE的文档提交 Pull Request 补充更多的 Q&A*
